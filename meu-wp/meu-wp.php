@@ -7,7 +7,7 @@ Version: 1.0
 Author: JS WEB 
 Author URI: www.glsweb.com.br
 */
-//Declare aqui as Constantes'
+//Declare aqui as Constantes.'
 
 
 define( 'MEUWP__DIR', plugin_dir_path( __FILE__ ) );
