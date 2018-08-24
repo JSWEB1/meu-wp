@@ -1,0 +1,51 @@
+[
+    {
+        "name": "automattic/woocommerce",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/woocommerce/wc-api-php.git",
+            "reference": "9b1157c062fdf7929e9726a779a3ecf832af40be"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/woocommerce/wc-api-php/zipball/9b1157c062fdf7929e9726a779a3ecf832af40be",
+            "reference": "9b1157c062fdf7929e9726a779a3ecf832af40be",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-json": "*",
+            "php": ">= 5.4.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "*"
+        },
+        "time": "2017-09-25T17:45:41+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Automattic\\WooCommerce\\": [
+                    "src/WooCommerce"
+                ]
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Claudio Sanches",
+                "email": "claudio.sanches@automattic.com"
+            }
+        ],
+        "description": "A PHP wrapper for the WooCommerce REST API",
+        "keywords": [
+            "api",
+            "woocommerce"
+        ]
+    }
+]
