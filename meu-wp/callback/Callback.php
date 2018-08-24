@@ -1,30 +1,23 @@
-<?
-class PostListener {
-
-   private $valid = false;
-
-   /**
-    * @param array $postdata $_POST array
-    */
-   public function __construct(array $postdata) {
-       $this->valid = $this->validatePostData($postdata);
-   }
-
-   /**
-    * Runs on 'onchangeapi' action
-    */
-   public function __invoke() {
-      if ($this->valid) {
-          // do whatever you need to do 
-          exit();
-      }
-   }
-
-   /**
-    * @param array $postdata $_POST array
-    * @return bool
-    */
-   private function validatePostData(array $postdata) {
-      // check here the $_POST data, e.g. if the post data actually comes
-    
+<?php  
+  if (isset($_POST)) {
+    $myfile = fopen("logDoPost.txt", "a") or die("não deu!");
+    $txt = "".$_POST.PHP_EOL;
+    $printr = var_export($_POST, true);
+   
+    fwrite($myfile, $txt . $printr);
+    fclose($myfile);
+    if (isset($_POST['ORDER'])) {
+      $myfile = fopen("logDoGetOrder.txt", "w") or die("não deu!");
+      $txt = "".var_dump($_POST['ORDER']);
+      fwrite($myfile, $txt);
+      fclose($myfile);
+    }
+  }  
+  if (isset($_GET)) {
+    $myfile = fopen("logDoGet.txt", "a") or die("não deu!");
+    $txt = "".$_GET.PHP_EOL;
+    $printr = var_export($_GET, true);
+    fwrite($myfile, $txt . $printr);
+    fclose($myfile);
+  }
 ?>
