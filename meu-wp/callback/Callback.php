@@ -1,4 +1,5 @@
 <?php  
+// URL de callback: {{SEUSITE}}/wp-content/plugins/meu-wp/callback/Callback.php
   if (isset($_POST)) {
     $myfile = fopen("logDoPost.txt", "a") or die("não deu!");
     $txt = "".$_POST.PHP_EOL;
