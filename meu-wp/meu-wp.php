@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Integração Anymarket
-Plugin URI: Não definido
+Plugin URI: https://github.com/JSWEB1/meu-wp
 Description: Este plugin serve para integrar sua loja virtual com o Anymarket
 Version: 1.0
 Author: JS WEB 
