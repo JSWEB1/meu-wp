@@ -7,7 +7,7 @@ Version: 1.0
 Author: JS WEB 
 Author URI: www.glsweb.com.br
 */
-//Declare aqui as Constantes.'
+//Declare aqui as Constantes'
 
 
 define( 'MEUWP__DIR', plugin_dir_path( __FILE__ ) );
@@ -93,6 +93,7 @@ class MeuWoo{
 		public function desativar7(){
 				delete_option('id_orderswoo');
 		}
+
  //Função de POST do Client secret WooCommerce
  public function adicionaFrase1($PostDoSecret){
 	 $secretwoo = get_option('secret_woo');
@@ -210,6 +211,12 @@ class MeuAny{
 	  public function desativar2(){
 	  	delete_option('oi_any');
 	  }
+	  public function ativar8(){
+			add_option('url_callback');
+		}
+	  public function desativar8(){
+			delete_option('url_callback');
+		}
 	  public function criarMenu(){
 	 
 	 add_menu_page('Integração Anymarket', 'Integração Anymarket',10, 'meu-wp/meu-wp-config.php');
@@ -247,6 +254,19 @@ else{
 	 return $PostDoOi;
 	 }
  }
+     //Função de POST da URL de callback
+   public function adicionaFrase8($PostDaUrlDeCallback){
+	 $urlcallback= get_option('url_callback');
+	 
+		if( strlen( $urlcallback ) > 0 ){
+	 		//Vamos dar um estilo pra diferenciar do resto!
+	 		$urlcallback = '<span style="color: #f00; font-size: 18px;">'.$urlcallback.'</span>';
+	 
+			return $urlcallback."<br /><br />".$PostDaUrlDeCallback;
+	 }else{
+	 		return $PostDaUrlDeCallback;
+	 }
+ }
 }
  
 $pathPlugin = substr(strrchr(dirname(__FILE__),DIRECTORY_SEPARATOR),1).DIRECTORY_SEPARATOR.basename(__FILE__);
@@ -261,6 +281,7 @@ register_activation_hook( $pathPlugin, array('MeuWoo','ativar4'));
 register_activation_hook( $pathPlugin, array('MeuWoo','ativar5'));
 register_activation_hook( $pathPlugin, array('MeuWoo','ativar6'));
 register_activation_hook( $pathPlugin, array('MeuWoo','ativar7'));
+register_activation_hook( $pathPlugin, array('MeuAny','ativar8'));
 
 // Função desativar
 register_deactivation_hook( $pathPlugin, array('MeuAny','desativar'));
@@ -272,6 +293,7 @@ register_deactivation_hook( $pathPlugin, array('MeuWoo','desativar4'));
 register_deactivation_hook( $pathPlugin, array('MeuWoo','desativar5'));
 register_deactivation_hook( $pathPlugin, array('MeuWoo','desativar6'));
 register_deactivation_hook( $pathPlugin, array('MeuWoo','desativar7'));
+register_deactivation_hook( $pathPlugin, array('MeuAny','desativar8'));
  
 //Ação de criar menu
 add_action('admin_menu', array('MeuAny','criarMenu'));
