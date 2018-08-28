@@ -9,9 +9,8 @@
 			$prodAny = new ProductAny();
 			$prodW = new ProductsWoo();
 			$arrayAny = $prodW->get($id, $per_page);
-			echo $F->divBorder(var_dump($arrayAny));
-
-			if (count($arrayAny) > 1) 
+			$count = count($arrayAny);
+			if ($count != null && count($count) > 0) 
 			{
 			 	$count = 1;
 			 	for ($i=0; $i < count($arrayAny); $i++) 
