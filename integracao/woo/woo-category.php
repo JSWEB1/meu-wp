@@ -108,8 +108,32 @@
 			return $arrayAny;
 		}
 
-		//</Get Products>
+		function getCat($id){
+			require_once (MEUWP__DIR.'integracao/config/funcs.php');
+			require_once (MEUWP__DIR.'integracao/config/auth.php');
+			require_once (MEUWP__DIR.'integracao/config/conn.php');
+			$F = new Funcs();
+			$auth = new Auth();
+			//echo '<script>myFunction("Antes de Instanciar o Woo");</script>';
+			$woo = $auth->getWoo();
+			$conn = new Connection();
 
+			$endpoint = 'products/categories/'.$id;
+
+			if ($r != null) 
+			{
+				$arrayAny =
+					array(
+						'id' => $r['id'],
+						'name' => $F->notNull($r['name'], ""),
+
+						'partnerId' => $r['id'],
+						'priceFactor' => 1,
+						'calculatedPrice' => true,
+						'definitionPriceScope' => 'COST',
+					);
+			}
+			return $arrayAny;
+		}	
 	}
-
 ?>

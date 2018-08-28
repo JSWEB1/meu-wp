@@ -23,6 +23,7 @@
     </script>
 </head>
 <?php
+
 if($_POST){
 	if( isset( $_POST['tokenany']) &&$_POST['tokenany'] != ''){
 		update_option('token_any', $_POST['tokenany']);
@@ -89,6 +90,7 @@ if($_POST){
 				  		<br>
 				    		<label style="float:left">OI anymarket: </label>
 				    		<input type="text"  class="form-control" name="oiany" value="<?php echo get_option('oi_any');?>"/>
+
 				 		<br>
  					</dd>
  				</dt>
@@ -97,6 +99,11 @@ if($_POST){
 				<span class="glyphicon glyphicon-floppy-save"></span>
 				<b>Salvar altera&ccedil;&otilde;es</b>
 				</button>
+				<br><br><br>
+				<label style="float: left;">URL De callback de pedidos</label>
+				<input type="text" style="font-size: 12px;" class="form-control" name="url_callback" id="url_callback" value="<?php echo get_option('siteurl') .'/wp-content/plugins/meu-wp/callback/Callback.php' ?>">
+				
+			
 				</form>
 			</div>
 			<div id="integraWoo" class="tab-pane fade">

@@ -10,7 +10,8 @@
 							ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 							TYPE VARCHAR(5) NOT NULL,
 							ID_WOO INT NOT NULL,
-							ID_ANY INT NOT NULL
+							ID_ANY INT NOT NULL,
+							SYNC VARCHAR(5) NOT NULL
 							);";
 				$results = $wpdb->get_results($query, OBJECT);
 			}
@@ -30,9 +31,7 @@
 				return false;
 			}
 		}
-		public function populeByAny(){
-		}
-		public function saveVinc($type, $idWoo, $idAny){
+		public function saveVinc($type, $idWoo, $idAny, $sync = 'N'){
 			/*
 			*C->Categorias
 			*P->Produtos
@@ -41,7 +40,7 @@
 			if (!isset($wpdb)) {
 				global $wpdb;
 			}
-			$return = $wpdb->get_results("insert into {$wpdb->prefix}IDWOOTOANY (TYPE, ID_WOO, ID_ANY) values ('{$type}', {$idWoo}, {$idAny})", OBJECT);
+			$return = $wpdb->get_results("insert into {$wpdb->prefix}IDWOOTOANY (TYPE, ID_WOO, ID_ANY, SYNC) values ('{$type}', {$idWoo}, {$idAny}, '{$sync}')", OBJECT);
 			return $return;
 		}
 		public function getVincByWoo($type, $id)
@@ -51,18 +50,29 @@
 			}
 			$sql = "select max(ID_ANY) as ID_ANY from {$wpdb->prefix}IDWOOTOANY where ID_WOO = {$id} and TYPE = '{$type}'";
 			//print_r($sql);
-			$return = $wpdb->get_results($sql , OBJECT);
+			$return = $wpdb->get_results($sql, OBJECT);
 			return json_decode(json_encode($return[0]), true)["ID_ANY"];
 		}
+		
 		public function getVincByAny($type, $id)
 		{
 			if (!isset($wpdb)) {
 				global $wpdb;
 			}
 			$sql = "select max(ID_WOO) as ID_WOO from {$wpdb->prefix}IDWOOTOANY where ID_ANY = {$id} and TYPE = '{$type}'";
-			$return = $wpdb->get_results("select max(ID_WOO) as ID_WOO from {$wpdb->prefix}IDWOOTOANY where ID_ANY = {$id} and TYPE = '{$type}'", OBJECT);
+			$return = $wpdb->get_results($sql, OBJECT);
 			return json_decode(json_encode($return[0]), true)["ID_WOO"];
 		}
+		
+		//Get conferencia do SYNC
+		public function getConfSync($type)
+		{
+			if (!isset($wpdb)) {
+				global $wpdb;
+			}
+			$sql = "select ID_WOO from {$wpdb->prefix}IDWOOTOANY where SYNC = 'N' and TYPE = '{$type}'";
+			$return = $wpdb->get_results($sql, OBJECT);
+			return json_decode(json_encode($return), true);
+		}
 	}
-	$con = new Connection();
 ?>
