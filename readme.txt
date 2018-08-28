@@ -1,1 +1,0 @@
-Este plugin serve para integrar sua loja virtual criada com woocommerce ao Anymarket, um hub de integração com marketplaces

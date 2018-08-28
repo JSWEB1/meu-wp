@@ -11,4 +11,5 @@
 			return get_option('token_any');
 		}
 	}
+
  ?>

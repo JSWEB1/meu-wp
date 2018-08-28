@@ -5,23 +5,21 @@
 	}
 	require_once (STORE__DIR.'wp-load.php');
 	require_once (MEUWP__DIR.'integracao/vendor/autoload.php');
+
 	use Automattic\WooCommerce\Client;
 	class Auth 
 	{
 		public function getUrl()
 		{
-			if (!defined('ABSPATH')) {
-					echo '<script>myFunction("Não Herdou ABSPATH");</script>';
-			}
-			return "".get_option('siteurl');
+			return STORE__URL;
 		}
 		public function getCs()
 		{
-			return "".get_option('secret_woo');
+			return get_option('secret_woo');
 		}
 		public function getCk()
 		{
-			return "".get_option('key_woo');
+			return get_option('key_woo');
 		}
 		public function getWoo()
 		{
