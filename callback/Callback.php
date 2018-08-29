@@ -2,7 +2,7 @@
 // URL de callback: {{SEUSITE}}/wp-content/plugins/meu-wp/callback/Callback.php
 if (isset($_POST)) {
     $myfile = fopen("logDoPost.txt", "a+") or die("não deu!");
-    $txt = var_export($_POST, true) . PHP_EOL;
+    $txt = file_get_contents("php://input") ;
     fwrite($myfile, $txt);
     fclose($myfile);
     if (isset($_POST['ORDER'])) {
@@ -14,7 +14,7 @@ if (isset($_POST)) {
 }
 if (isset($_GET)) {
     $myfile = fopen("logDoGet.txt", "a+") or die("não deu!");
-    $txt = var_export($_GET, true) . PHP_EOL;
+    $txt = file_get_contents("php://input")
     fwrite($myfile, $txt);
     fclose($myfile);
 }
