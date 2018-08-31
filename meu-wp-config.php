@@ -101,7 +101,7 @@ if($_POST){
 				</button>
 				<br><br><br>
 				<label style="float: left;">URL De callback de pedidos</label>
-				<input type="text" style="font-size: 12px;" class="form-control" name="url_callback" id="url_callback" value="<?php echo get_option('siteurl') .'/wp-content/plugins/meu-wp/callback/callback.php' ?>">
+				<input type="text" style="font-size: 12px;" class="form-control" name="url_callback" id="url_callback" value="<?php echo get_option('siteurl') .'/wp-content/plugins/meu-wp/callback/Callback.php' ?>">
 				
 			
 				</form>
