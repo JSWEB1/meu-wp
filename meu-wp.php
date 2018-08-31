@@ -7,15 +7,53 @@ Version: 1.0
 Author: JS WEB 
 Author URI: www.glsweb.com.br
 */
-//Declare aqui as Constantes
+//Declare aqui as Constantes'
+
+
 define( 'MEUWP__DIR', plugin_dir_path( __FILE__ ) );
 //var_dump(MEUWP__DIR);
-define( 'MEUWP__URL', site_url().'/wp-content/plugins/meu-wp/' );
+define( 'MEUWP__URL', site_url().'/wp-content/plugins/meu-wp/');
 //var_dump(MEUWP__URL);
 define( 'STORE__URL', site_url() );
 define( 'STORE__DIR', ABSPATH);
+class Posts{
+	function Echo($message){
+		$message = '<h1>'.$message.'</h1>';
+		echo '<h1>'.$message.'</h1>';	
+	}
+	function Alert($message){
+		$message = '<script>myFunction("'.$message.'");</script>';
+		return $message;	
+	}
 
+// time() + 3600 = one hour from now.
 
+	function postOneProd($id){
+		require_once MEUWP__DIR.'integracao/products.php';
+		$prods = new Products();
+		$prods->post($id);
+	}
+	function postAllProd(){
+	require_once MEUWP__DIR.'integracao/products.php';
+	$x = 1;
+	$prods = new Products();
+	$prods->post();
+}
+	function postAllCat(){
+		require_once MEUWP__DIR.'integracao/category.php';
+		$prods = new Category();
+		$prods->post();
+	}
+	function postOneCat($id){
+		require_once MEUWP__DIR.'integracao/category.php';
+		$prods = new Category();
+		$prods->post($id);
+	}
+	function postAllOrders(){
+		require_once MEUWP__DIR.'integracao/orders.php';
+		$orders = new Order();
+	}
+}
 class MeuWoo{ 
 		public function ativar1(){
 				add_option('secret_woo', '');
@@ -59,6 +97,7 @@ class MeuWoo{
 		public function desativar7(){
 				delete_option('id_orderswoo');
 		}
+
  //Função de POST do Client secret WooCommerce
  public function adicionaFrase1($PostDoSecret){
 	 $secretwoo = get_option('secret_woo');
@@ -176,6 +215,12 @@ class MeuAny{
 	  public function desativar2(){
 	  	delete_option('oi_any');
 	  }
+	  public function ativar8(){
+			add_option('url_callback');
+		}
+	  public function desativar8(){
+			delete_option('url_callback');
+		}
 	  public function criarMenu(){
 	 
 	 add_menu_page('Integração Anymarket', 'Integração Anymarket',10, 'meu-wp/meu-wp-config.php');
@@ -213,9 +258,22 @@ else{
 	 return $PostDoOi;
 	 }
  }
+     //Função de POST da URL de callback
+   public function adicionaFrase8($PostDaUrlDeCallback){
+	 $urlcallback= get_option('url_callback');
+	 
+		if( strlen( $urlcallback ) > 0 ){
+	 		//Vamos dar um estilo pra diferenciar do resto!
+	 		$urlcallback = '<span style="color: #f00; font-size: 18px;">'.$urlcallback.'</span>';
+	 
+			return $urlcallback."<br /><br />".$PostDaUrlDeCallback;
+	 }else{
+	 		return $PostDaUrlDeCallback;
+	 }
+ }
 }
  
-
+$pathPlugin = substr(strrchr(dirname(__FILE__),DIRECTORY_SEPARATOR),1).DIRECTORY_SEPARATOR.basename(__FILE__);
  
 // Função ativar
 register_activation_hook( $pathPlugin, array('MeuAny','ativar'));
@@ -227,6 +285,7 @@ register_activation_hook( $pathPlugin, array('MeuWoo','ativar4'));
 register_activation_hook( $pathPlugin, array('MeuWoo','ativar5'));
 register_activation_hook( $pathPlugin, array('MeuWoo','ativar6'));
 register_activation_hook( $pathPlugin, array('MeuWoo','ativar7'));
+register_activation_hook( $pathPlugin, array('MeuAny','ativar8'));
 
 // Função desativar
 register_deactivation_hook( $pathPlugin, array('MeuAny','desativar'));
@@ -238,7 +297,7 @@ register_deactivation_hook( $pathPlugin, array('MeuWoo','desativar4'));
 register_deactivation_hook( $pathPlugin, array('MeuWoo','desativar5'));
 register_deactivation_hook( $pathPlugin, array('MeuWoo','desativar6'));
 register_deactivation_hook( $pathPlugin, array('MeuWoo','desativar7'));
-
+register_deactivation_hook( $pathPlugin, array('MeuAny','desativar8'));
  
 //Ação de criar menu
 add_action('admin_menu', array('MeuAny','criarMenu'));
@@ -248,27 +307,88 @@ add_action('admin_menu', array('MeuAny','criarMenu'));
 //Filtro do conteúdo
 
 
-class Posts{
-	function Echo($message){
-		$message = '<h1>'.$message.'</h1>';
-		echo '<h1>'.$message.'</h1>';	
-	}
-	function Alert($message){
-		$message = '<script>myFunction("'.$message.'");</script>';
-		return $message;	
-	}
-	function postAll(){
-		set_time_limit(300);
-		require_once MEUWP__DIR.'integracao/products.php';
-		$prods = new Products();
-		$prods->postProdsIdPer(-1, 10);
-	}
 
-	function postOne($id){
-		set_time_limit(300);
-		require_once MEUWP__DIR.'integracao/products.php';
-		$prods = new Products();
-		$prods->postProdsId($id);
-	}
+
+
+
+
+
+
+#####################################################################
+
+
+// The activation hook
+// print "hey";
+// function isa_activation(){
+// 	print "isa_activation";
+// 	if( !wp_next_scheduled( 'postAllProd' ) ){
+// 		wp_schedule_event( time(), 'every_three_minutes', 'postAllProd' );
+// 	}
+// }
+// register_activation_hook(   __FILE__, 'isa_activation' );
+
+// // The deactivation hook
+// function isa_deactivation(){
+// 	if( wp_next_scheduled( 'postAllProd') ){
+// 		wp_clear_scheduled_hook( 'postAllProd' );
+// 	}
+// }
+// register_deactivation_hook( __FILE__, 'isa_deactivation' );
+
+
+// // The schedule filter hook
+// function isa_add_every_three_minutes( $schedules ) {
+// 	$schedules['every_three_minutes'] = array(
+// 		'interval'  => 180,
+// 		'display'   => __( 'Every 3 Minutes', 'textdomain' )
+// 	);
+
+// 	return $schedules;
+// }
+// add_filter( 'cron_schedules', 'isa_add_every_three_minutes' );
+
+//  Schedule de produtos
+add_filter( 'cron_schedules', 'isa_postAllProd' );
+function isa_postAllProd( $schedules ) {
+	$schedules['postAllProd'] = array(
+		'interval'  => 180,
+		'display'   => __( 'Every 3 Minutes', 'textdomain' )
+	);
+
+	return $schedules;
 }
+
+if ( ! wp_next_scheduled( 'isa_postAllProd' ) ) {
+    wp_schedule_event( time() + 5, 'postAllProd', 'isa_postAllProd' );
+}
+
+add_action( 'isa_postAllProd', 'postAllProdFun' );
+function postAllProdFun(){
+	require_once MEUWP__DIR.'integracao/products.php';
+	$x = 1;
+	$prods = new Products();
+	$prods->post();
+}
+
+//Schedule de categorias
+add_filter( 'cron_schedules', 'isa_postAllCat' );
+function isa_postAllCat( $schedules ) {
+	$schedules['postAllCat'] = array(
+		'interval'  => 180,
+		'display'   => __( 'Every 3 Minutes', 'textdomain' )
+	);
+
+	return $schedules;
+}
+
+if ( ! wp_next_scheduled( 'isa_postAllCat' ) ) {
+    wp_schedule_event( time() + 5, 'postAllCat', 'isa_postAllCat' );
+}
+
+add_action( 'isa_postAllCat', 'postAllCatFun' );
+	function postAllCatFun(){
+		require_once MEUWP__DIR.'integracao/category.php';
+		$prods = new Category();
+		$prods->post();
+	}
 ?>

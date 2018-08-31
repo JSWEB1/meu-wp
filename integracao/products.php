@@ -1,24 +1,23 @@
 <?php 
 	class Products{
-		function postProds(){
-			$this->postProdsId(-1);
-		}
-		function postProdsId($id){
-			$this->postProdsIdPer($id, 10);	
-		}
-		function postProdsIdPer($id, $per_page){
-			require (MEUWP__DIR.'integracao/woo/products.php');
-			require_once ('anymarket/any-products.php');
-
+		function post($id = -1, $per_page = 10)
+		{
+			require (MEUWP__DIR.'integracao/woo/woo-products.php');
+			require_once (MEUWP__DIR.'integracao/anymarket/any-products.php');
+			require_once (MEUWP__DIR.'integracao/config/funcs.php');
+			$F = new Funcs();
 			$prodAny = new ProductAny();
 			$prodW = new ProductsWoo();
 			$arrayAny = $prodW->get($id, $per_page);
-			$result = $prodAny->get(-1);
+			echo $F->divBorder(var_dump($arrayAny));
 
-			if (count($arrayAny) > 1) {
+			if (count($arrayAny) > 1) 
+			{
 			 	$count = 1;
-			 	for ($i=0; $i < count($arrayAny); $i++) { 
-			 		if ($count == 9) {
+			 	for ($i=0; $i < count($arrayAny); $i++) 
+			 	{ 
+			 		if ($count == 9) 
+			 		{
 			 			$count = 1;
 			 			sleep(1);
 			 		}
@@ -44,14 +43,15 @@
 					$result = $result.' Erro -> \n '.$e.' \n ';  
 				}
 			}
-		
-			if ($result != '') {
+			if ($result != '') 
+			{
 				$error = 'Erro durante o processo: '.$result;
 				echo '<script>myFunction("'.$error.'");</script>';
-			}else{
-				echo '<script>myFunction("Tudo OK");</script>';
+			}
+			else
+			{
+				echo '<script>myFunction("Tudo OK \n'.$result.'");</script>';
 			}
 		}
-
 	}	
  ?>

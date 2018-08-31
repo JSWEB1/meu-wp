@@ -1,122 +1,113 @@
 <?php 
-
-	require_once ('vendor/autoload.php');
-	require_once ('config/auth.php');
-	require_once ('anymarket/any-category.php');
-	use Automattic\WooCommerce\Client;
-	
-	$auth = new Auth();
-	$id = -1;
-
-	if (isset($_POST['expcat'])) {
-		if (($_POST['ID']) >= 0) {
-			$id = $_POST['ID'];
-		}
-	}else{
-		return;
-	}
-
-	$woo = $auth->getWoo();
-	$endpoint = 'products/categories';
-	if ($id >= 0) {
-		$endpoint = $endpoint.'/'.$id;
-	}
-
-	$r = $woo->get($endpoint);
-	if ($r != null) {
-		if (count($r) > -1) {
-			for ($i=0; $i < count($r); $i++) {
-				if ( $r[$i]['parent'] > 1) {
-					$arrayAny[] = array(
-					'id' => $r[$i]['id'],
-						'name' => $r[$i]['name'],
-						'partnerId' => $r[$i]['id'],
-						'parent' => 
-							array('id' => $r[$i]['parent']['id'] > 0 ? $r[$i]['parent']['id'] : 0),
-						'priceFactor' => 1,
-						'calculatedPrice' => true,
-						'definitionPriceScope' => 'COST',
-						
-						
-					);
-					echo '<br>',
-					var_dump($arrayAny);
-					
-						
-				}else{
-					$arrayAny[] = array(
-					'id' => $r[$i]['id'],
-						'name' => $r[$i]['name'],
-						'partnerId' => $r[$i]['id'],
-						'priceFactor' => 1,
-						'calculatedPrice' => true,
-						'definitionPriceScope' => 'COST',
-					);
+	class Category 
+	{
+		function post($id = -1, $per_page = 10)
+		{
+			require (MEUWP__DIR.'integracao/woo/woo-category.php');
+			require_once (MEUWP__DIR.'integracao/anymarket/any-category.php');
+			require_once (MEUWP__DIR.'integracao/config/conn.php');
+			require_once (MEUWP__DIR.'integracao/config/funcs.php');
+			$catAny = new CategoryAny();
+			$catW = new CategoryWoo();
+			$conn = new Connection();
+			$F = new Funcs();
+			$arrayAny = $catW->get($id, $per_page);
+			if (count($arrayAny) > 1) 
+			{
+			 	for ($i=0; $i < count($arrayAny); $i++) 
+			 	{ 
+			 		if ($count == 9) 
+			 		{
+			 			$count = 1;
+			 			sleep(1);
+			 		}
+			 		$count++;
+			 		try 
+			 		{
+			 			$result = ($catAny->post($arrayAny[$i]));
+			 			if ($F->notNull($result, "") != "") {
+			 				$resultArray = json_decode($result, true);
+			 				$conn->saveVinc("C", $arrayAny[$i]['id'], $resultArray['id']);
+			 			}
+			 		} 
+			 		catch (Exception $e) 
+			 		{
+			 			$result = $result.' Erro -> \n '.$e.' \n '; 
+			 		}
+			 	}
+			}
+			else
+			{
+				try 
+				{
+					$result = ($catAny->post($arrayAny));
+				} 
+				catch (Exception $e) 
+				{
+					$result = $result.' Erro -> \n '.$e.' \n ';  
 				}
-				echo '<br><br>',
-				
-				var_dump($arrayAny);
 			}
-
-		}else{
-			if ( $r[$i]['parent'] > -1) {
-				
-				$arrayAny = array(
-				'id' => $r[$i]['id'],
-				'name' => $r['name'],
-				'partnerId' => $r['id'],
-			
-
-				);
-				var_dump($arrayAny);
-			}else{
-				$arrayAny = array(
-				'id' => $r[$i]['id'],
-				'name' => $r['name'],
-				'priceFactor' => 1,
-				'calculatedPrice' => true,
-				'definitionPriceScope' => 'COST',
-
-				);
+			if ($result != '') 
+			{
+				$error = 'Erro durante o processo: '.$result;
+				echo '<script>myFunction("'.$error.'");</script>';
 			}
-		}
+			else
+			{
+				echo '<script>myFunction("Tudo OK \n'.$result.'");</script>';
+			} 
 
-		$cat = new Category();
-		var_dump($cat->get($id));
-		if (count($arrayAny) > 1) {
-		 	$count = 1;
-		 	for ($i=0; $i < count($arrayAny); $i++) { 
-		 		if ($count == 8) {
-		 			$count = 1;
-		 			sleep(1);
-		 		}
-		 		$count++;
-		 		try 
+			$arrayAny = $catW->get($id, $per_page, true);
+			//$arrayAny = json_decode(json_encode($arrayAny), true);
+			if (count($arrayAny) > 0) 
+			{
+				echo 'if 1';
+				for ($i=0; $i < count($arrayAny); $i++) 
+			 	{ 
+			 		if ($count == 9) 
+			 		{
+			 			$count = 1;
+			 			sleep(1);
+			 		}
+			 		$count++;
+			 		try 
+			 		{
+			 			$result = ($catAny->put($arrayAny[$i]['id_chield'], $arrayAny[$i]['cat']));
+			 			if ($F->notNull($result, "") != "") 
+			 			{
+			 				$resultArray = json_decode($result, true);
+			 			}
+			 		} 
+			 		catch (Exception $e) 
+			 		{
+			 			$result = $result.' Erro -> \n '.$e.' \n '; 
+			 		}
+			 	}
+			}
+			else if(isset($arrayAny['cat']))
+			{
+				echo 'if 2';
+				try 
 		 		{
-		 			($cat->post($arrayAny[$i]));
+		 			$result = ($catAny->put($arrayAny['id_chield'], $arrayAny['cat']));
+		 			if ($F->notNull($result, "") != "") 
+		 			{
+		 				$resultArray = json_decode($result, true);
+		 			}
 		 		} 
 		 		catch (Exception $e) 
 		 		{
 		 			$result = $result.' Erro -> \n '.$e.' \n '; 
 		 		}
-		 	}
-		} 
-		else
-		{
-			try 
-			{
-				($cat->post($arrayAny));
-			} 
-			catch (Exception $e) 
-			{
-				$result = $result.' Erro -> \n '.$e.' \n ';  
 			}
+			else
+			{
+				echo 'ué';
+			}
+			if ($F->notNull($result, "") != "") 
+ 			{
+ 				echo "<script>myFunction(\"".$result."\")</script>";
+ 			}
 		}
-	}else{
-		$result = ('deu ruim');
-	}
-	
-	if ($result != '') {
-		print_r($result);
 	}
  ?>
