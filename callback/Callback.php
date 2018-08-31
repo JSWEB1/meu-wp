@@ -18,3 +18,15 @@ if (isset($_GET)) {
     fwrite($myfile, $txt);
     fclose($myfile);
 }
+if (isset($_PUT)) {
+    $myfile = fopen("logDoPut.txt", "a+") or die("não deu!");
+    $txt = file_get_contents("php://input")
+    fwrite($myfile, $txt);
+    fclose($myfile);
+}
+if (isset($_DELETE)) {
+    $myfile = fopen("logDoDelete.txt", "a+") or die("não deu!");
+    $txt = file_get_contents("php://input")
+    fwrite($myfile, $txt);
+    fclose($myfile);
+}
