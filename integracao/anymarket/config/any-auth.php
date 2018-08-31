@@ -10,7 +10,7 @@
 
 		{
 
-			return 'app-api.anymarket.com.br/v2/';
+			return 'sandbox-api.anymarket.com.br/v2/';
 
 		}
 
