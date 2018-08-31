@@ -220,23 +220,6 @@
 				</button>
 			</form>
     	</div>
-    	<div style="position:absolute; margin-left: 65%;margin-top: -500px">
-	<form action="" method="post" id="formenv">
-	<button style="width:60px" type="submit"	 class="btn btn-primary" id="expevt" name="expevt">
-		 <dt style="text-align:center">
-			<span class="glyphicon glyphicon-export"></span>
-			<b></b>
-			</button>
-</form>
-
-</div>
-
-<script>
-$('#expevt').on('click', function(){
-   alert('Aqui você vai fazer seu ajax enviar' )
-   //$.ajax()
-})
-</script>
     </div>
   </div>
 </div>
