@@ -28,6 +28,41 @@
     	{
 		    alert(message);
 		}
+		function postProds(){
+			var retorno = '';
+			var result = false;
+			$.ajax({
+				type:"post",
+				url: "",
+				data:"expprod=true",
+				cache:false,
+				success: function(){
+					result = true;alert('Enviou');
+				},
+				error: function (retorno) {
+    				alert('Erro ao Enviar' + retorno);
+  				}
+			});
+			return false;
+		}		
+
+		function postCats(){
+			var retorno = '';
+			var result = false;
+			$.ajax({
+				type:"post",
+				url: "",
+				data:"expcat=true",
+				cache:false,
+				success: function(){
+					result = true;alert('Enviou');
+				},
+				error: function (retorno) {
+    				alert('Erro ao Enviar' + retorno);
+  				}
+			});
+			return false;
+		}
     </script>
 </head>
 <?php
@@ -121,7 +156,7 @@
 	         				<dt style="text-align:center">
 							<label style="">Limite por envio (20 a 100)<input type="text"  class="form-control" name="catwooli" value="<?php echo get_option('limit_catwoo');?>"/></label>
 							<br><br>
-							<button style="width:230px" type="submit"	class="btn btn-primary" id="expcat" name="expcat" >
+							<button style="width:230px" type="submit"	class="btn btn-primary" id="expcat" name="expcat" onclick="return postCats()">
 							  <span class="glyphicon glyphicon-export"></span>
 							  <b>Exportar todas</b>
 							</button>
@@ -154,11 +189,11 @@
 	 	<div class="alert alert-info"  style="text-align:center">
   			Exportação de produtos
 		</div>
-	  <!--Exportar todos os produtos -->
-      <form action="" method="post">
+	    <!--Exportar todos os produtos -->
+        <form action="" method="post">
 	         <dt style="text-align:center">
 			 <label style="">Limite por envio(20 a 100)<input type="text"  class="form-control" name="prodwooli" value="<?php echo get_option('limit_prodwoo');?>"/></label><br><br>
-			<button style="width:230px" type="submit"	class="btn btn-primary" id="expprod" name="expprod" >
+			<button style="width:230px" type="submit"	class="btn btn-primary" id="expprod" name="expprod" onclick="return postProds()">
 		    <span class="glyphicon glyphicon-export"></span>
 			 <b>Exportar todos</b>
 			 </button>
