@@ -17,8 +17,7 @@
 		public function getTokenAny()
 
 		{
-			echo '<script>myFunction("'.get_option('token_any').'");</script>';
-			return 'L28917560G1530708979570R-1673130305';
+			return ''.get_option('token_any');
 		}
 
 	}
