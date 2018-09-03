@@ -24,11 +24,14 @@
 			 		$count++;
 			 		try 
 			 		{
-			 			$result = ($catAny->post($arrayAny[$i]));
-			 			if ($F->notNull($result, "") != "") {
-			 				$resultArray = json_decode($result, true);
-			 				$conn->saveVinc("C", $arrayAny[$i]['id'], $resultArray['id']);
-			 			}
+		 				if (!$this->checkIfExists($arrayAny[$i]['id'])) {
+		 					$this->write("Entrou pq?1");
+				 			$result = ($catAny->post($arrayAny[$i]));
+				 			if ($F->notNull($result, "") != "") {
+				 				$resultArray = json_decode($result, true);
+				 				$conn->saveVinc("C", $arrayAny[$i]['id'], $resultArray['id']);
+				 			}
+		 				}
 			 		} 
 			 		catch (Exception $e) 
 			 		{
@@ -40,7 +43,14 @@
 			{
 				try 
 				{
-					$result = ($catAny->post($arrayAny));
+					if (!$this->checkIfExists($arrayAny['id'])) {
+						$this->write("Entrou pq?2");
+						$result = ($catAny->post($arrayAny));
+			 			if ($F->notNull($result, "") != "") {
+			 				$resultArray = json_decode($result, true);
+			 				$conn->saveVinc("C", $arrayAny['id'], $resultArray['id']);
+			 			}
+		 			}
 				} 
 				catch (Exception $e) 
 				{
@@ -72,10 +82,13 @@
 			 		$count++;
 			 		try 
 			 		{
-			 			$result = ($catAny->put($arrayAny[$i]['id_chield'], $arrayAny[$i]['cat']));
-			 			if ($F->notNull($result, "") != "") 
-			 			{
-			 				$resultArray = json_decode($result, true);
+			 			if (!$this->checkIfExists($arrayAny['id'])) {
+			 				$this->write("Entrou pq?3");
+				 			$result = ($catAny->put($arrayAny[$i]['id_chield'], $arrayAny[$i]['cat']));
+				 			if ($F->notNull($result, "") != "") 
+				 			{
+				 				$resultArray = json_decode($result, true);
+				 			}
 			 			}
 			 		} 
 			 		catch (Exception $e) 
@@ -89,10 +102,13 @@
 				echo 'if 2';
 				try 
 		 		{
-		 			$result = ($catAny->put($arrayAny['id_chield'], $arrayAny['cat']));
-		 			if ($F->notNull($result, "") != "") 
-		 			{
-		 				$resultArray = json_decode($result, true);
+		 			if (!$this->checkIfExists($arrayAny['id'])) {
+		 				$this->write("Entrou pq?4");
+			 			$result = ($catAny->put($arrayAny['id_chield'], $arrayAny['cat']));
+			 			if ($F->notNull($result, "") != "") 
+			 			{
+			 				$resultArray = json_decode($result, true);
+			 			}
 		 			}
 		 		} 
 		 		catch (Exception $e) 
@@ -108,6 +124,30 @@
  			{
  				echo "<script>myFunction(\"".$result."\")</script>";
  			}
+		}
+
+		public function write($text){
+			$myfile = fopen("logdoCheck.txt", "a+") or die("não deu!");
+
+		    $txt = $result.'\r\n';
+		    fwrite($myfile, $txt);
+		    fclose($myfile);
+		}
+
+		public function checkIfExists($idWoo){
+			require_once (MEUWP__DIR.'integracao/config/conn.php');
+			$conn = new Connection();
+
+			$result = $conn->getVincByWoo($idWoo);
+
+			$this->write($result);
+			
+			return true;
+			if (true) {
+				return true;
+			}else{
+				return false;
+			}
 		}
 	}
  ?>
