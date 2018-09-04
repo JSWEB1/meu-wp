@@ -23,7 +23,9 @@
     </script>
 </head>
 <?php
-
+			require_once (MEUWP__DIR.'integracao/config/funcs.php');
+			require_once (MEUWP__DIR.'integracao/config/conn.php');
+			$conn = new Connection();
 if($_POST){
 	if( isset( $_POST['tokenany']) &&$_POST['tokenany'] != ''){
 		update_option('token_any', $_POST['tokenany']);
@@ -106,6 +108,7 @@ if($_POST){
 			
 				</form>
 			</div>
+
 			<div id="integraWoo" class="tab-pane fade">
 				<form action="" method="post">
 					<dt>
@@ -114,10 +117,10 @@ if($_POST){
 			  				<strong></strong> Informe aqui os dados de integração Woocommerce
 						</div>
 		 			<dd>
-			  			<label style="float:left">Client Key</label>
+			  			<label style="float:left">Consumer Key</label>
 			    			<input type="text"  class="form-control" name="Key" value="<?php echo get_option('key_woo');?>"/>
 						<br>
-						<label style="float:left">Client Secret</label>
+						<label style="float:left">Consumer Secret</label>
 						<input type="text"  class="form-control" name="secret" value="<?php echo get_option('secret_woo');?>"/>
 						 <br>
 		 			</dd>
@@ -128,6 +131,38 @@ if($_POST){
 							<b>Salvar altera&ccedil;&otilde;es</b>
 						</button>
 				</form>
+			</div>
+
+
+			<div id="Logs2" class="tab-pane fade in active">		
+				  		<?php 
+				  			require_once(STORE__DIR.'wp-config.php');
+				  			require_once (MEUWP__DIR.'integracao/config/conn.php');
+				  			if(!isset($wpdb)){
+				  				global $wpdb;
+				  			}
+							$sql = "select ID_WOO,
+							CASE
+							When TYPE = 'C' then 'Categoria'
+							end as type
+							from {$wpdb->prefix}IDWOOTOANY ";
+							$result = $wpdb->get_results($sql);
+							$exibe = json_decode(json_encode($result), true);
+							echo "<table class='table table-hover' style='heigth:50px;'>";
+							echo "<thead>";
+							echo "<tr>";
+							echo "<th>ID</th>";
+							echo "<th>Tipo</th>";
+							echo "</tr>";
+							echo "</thead>";
+							foreach ($exibe as $IDZAO) {
+								echo("<tr>");
+								echo "<td>".$IDZAO['ID_WOO']."</td>";
+								echo "<td>".$IDZAO['type']."</td>";
+								echo("</tr>");
+							}
+							echo "</table>";
+						?>
 			</div>
 		</div>
 	</div>
