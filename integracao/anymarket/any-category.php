@@ -36,7 +36,6 @@
 			    'gumgaToken: '.$this->any_auth()->getTokenAny())                                                                    
 			);            
 			$result = curl_exec($ch);
-			print_r($result);
 			return $result;                                                                                                              
 		}
 		public function get($id = -1)

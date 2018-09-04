@@ -12,6 +12,7 @@
 			$conn = new Connection();
 			$F = new Funcs();
 			$arrayAny = $catW->get($id, $per_page);
+
 			if (count($arrayAny) > 1) 
 			{
 			 	for ($i=0; $i < count($arrayAny); $i++) 
@@ -25,7 +26,6 @@
 			 		try 
 			 		{
 		 				if (!$this->checkIfExists($arrayAny[$i]['id'])) {
-		 					$this->write("Entrou pq?1");
 				 			$result = ($catAny->post($arrayAny[$i]));
 				 			if ($F->notNull($result, "") != "") {
 				 				$resultArray = json_decode($result, true);
@@ -44,7 +44,6 @@
 				try 
 				{
 					if (!$this->checkIfExists($arrayAny['id'])) {
-						$this->write("Entrou pq?2");
 						$result = ($catAny->post($arrayAny));
 			 			if ($F->notNull($result, "") != "") {
 			 				$resultArray = json_decode($result, true);
@@ -68,10 +67,8 @@
 			} 
 
 			$arrayAny = $catW->get($id, $per_page, true);
-			//$arrayAny = json_decode(json_encode($arrayAny), true);
 			if (count($arrayAny) > 0) 
 			{
-				echo 'if 1';
 				for ($i=0; $i < count($arrayAny); $i++) 
 			 	{ 
 			 		if ($count == 9) 
@@ -82,9 +79,8 @@
 			 		$count++;
 			 		try 
 			 		{
-			 			if (!$this->checkIfExists($arrayAny['id'])) {
-			 				$this->write("Entrou pq?3");
-				 			$result = ($catAny->put($arrayAny[$i]['id_chield'], $arrayAny[$i]['cat']));
+			 			if (!$this->checkIfExists($arrayAny[$i]['id'])) {
+				 			$result = ($catAny->put($arrayAny[$i]['id_child'], $arrayAny[$i]['cat']));
 				 			if ($F->notNull($result, "") != "") 
 				 			{
 				 				$resultArray = json_decode($result, true);
@@ -99,12 +95,10 @@
 			}
 			else if(isset($arrayAny['cat']))
 			{
-				echo 'if 2';
 				try 
 		 		{
 		 			if (!$this->checkIfExists($arrayAny['id'])) {
-		 				$this->write("Entrou pq?4");
-			 			$result = ($catAny->put($arrayAny['id_chield'], $arrayAny['cat']));
+			 			$result = ($catAny->put($arrayAny['id_child'], $arrayAny['cat']));
 			 			if ($F->notNull($result, "") != "") 
 			 			{
 			 				$resultArray = json_decode($result, true);
@@ -126,27 +120,28 @@
  			}
 		}
 
-		public function write($text){
-			$myfile = fopen("logdoCheck.txt", "a+") or die("não deu!");
-
-		    $txt = $result.'\r\n';
-		    fwrite($myfile, $txt);
-		    fclose($myfile);
-		}
-
 		public function checkIfExists($idWoo){
 			require_once (MEUWP__DIR.'integracao/config/conn.php');
+			require_once (MEUWP__DIR.'integracao/anymarket/any-category.php');
+			$catAny = new CategoryAny();
 			$conn = new Connection();
+			$result = $conn->getVincByWoo('C', $idWoo);
 
-			$result = $conn->getVincByWoo($idWoo);
-
-			$this->write($result);
-			
-			return true;
-			if (true) {
-				return true;
+			if (isset($result)) {
+				$result = $catAny->get($result);
+				$result = json_decode($result, true);
+				if (isset($result['id'])) {
+					return true;
+				}else{
+					return false;
+				}
 			}else{
-				return false;
+				$result = $catAny->get($result);
+				if (isset($result['id'])) {
+					return true;
+				}else{
+					return false;
+				}
 			}
 		}
 	}
