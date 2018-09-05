@@ -202,7 +202,7 @@ if($_POST){
 							
 							echo "<div style='heigth:150px;width:100%'>";
 							echo "<div style='height:250px;overflow: auto;'>";
-							echo "<table class='table table-hover'>";
+							echo "<table class='table table-hover' id='dev-table'>";
 							echo "<thead>";
 							echo "<tr>";
 							echo "<th>ID</th>";
