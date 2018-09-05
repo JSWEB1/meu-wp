@@ -13,19 +13,24 @@
             width: 50%;
             margin: auto;
         }
+        #footer-thankyou{
+        	display:none;
+        }
+        #footer-upgrade{
+        	display:none;
+        }
     </style>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
-    </script>
+    
 </head>
 <?php
-			require_once (MEUWP__DIR.'integracao/config/funcs.php');
-			require_once (MEUWP__DIR.'integracao/config/conn.php');
-			$conn = new Connection();
+	require_once (MEUWP__DIR.'integracao/config/funcs.php');
+	require_once (MEUWP__DIR.'integracao/config/conn.php');
+	$conn = new Connection();
 if($_POST){
 	if( isset( $_POST['tokenany']) &&$_POST['tokenany'] != ''){
 		update_option('token_any', $_POST['tokenany']);
@@ -133,8 +138,53 @@ if($_POST){
 				</form>
 			</div>
 
+			<script>
+    		(function(){
+    'use strict';
+	var $ = jQuery;
+	$.fn.extend({
+		filterTable: function(){
+			return this.each(function(){
+				$(this).on('keyup', function(e){
+					$('.filterTable_no_results').remove();
+					var $this = $(this), search = $this.val().toLowerCase(), target = $this.attr('data-filters'), $target = $(target), $rows = $target.find('tbody tr');
+					if(search == '') {
+						$rows.show(); 
+					} else {
+						$rows.each(function(){
+							var $this = $(this);
+							$this.text().toLowerCase().indexOf(search) === -1 ? $this.hide() : $this.show();
+						})
+						if($target.find('tbody tr:visible').size() === 0) {
+							var col_count = $target.find('tr').first().find('td').size();
+							var no_results = $('<tr class="filterTable_no_results"><td colspan="'+col_count+'">No results found</td></tr>')
+							$target.find('tbody').append(no_results);
+						}
+					}
+				});
+			});
+		}
+	});
+	$('[data-action="filter"]').filterTable();
+	})(jQuery);
 
-			<div id="Logs2" class="tab-pane fade in active">		
+	$(function(){
+	    // attach table filter plugin to inputs
+		$('[data-action="filter"]').filterTable();
+		
+		$('.container').on('click', '.panel-heading span.filter', function(e){
+			var $this = $(this), 
+					$panel = $this.parents('.panel');
+			
+			$panel.find('.panel-body').slideToggle();
+			if($this.css('display') != 'none') {
+				$panel.find('.panel-body input').focus();
+			}
+		});
+		$('[data-toggle="tooltip"]').tooltip();
+	})
+    </script>
+			<div id="Logs2" class="tab-pane fade">
 				  		<?php 
 				  			require_once(STORE__DIR.'wp-config.php');
 				  			require_once (MEUWP__DIR.'integracao/config/conn.php');
@@ -148,7 +198,11 @@ if($_POST){
 							from {$wpdb->prefix}IDWOOTOANY ";
 							$result = $wpdb->get_results($sql);
 							$exibe = json_decode(json_encode($result), true);
-							echo "<table class='table table-hover' style='heigth:50px;'>";
+							echo "<input type='text' class='form-control' id='dev-table-filter' data-action='filter' data-filters='#dev-table' placeholder='Buscar' />";
+							
+							echo "<div style='heigth:150px;width:100%'>";
+							echo "<div style='height:250px;overflow: auto;'>";
+							echo "<table class='table table-hover'>";
 							echo "<thead>";
 							echo "<tr>";
 							echo "<th>ID</th>";
@@ -161,8 +215,13 @@ if($_POST){
 								echo "<td>".$IDZAO['type']."</td>";
 								echo("</tr>");
 							}
+							
 							echo "</table>";
+							echo "</div>";
+							echo "</div>";
+
 						?>
+					</div>
 			</div>
 		</div>
 	</div>
