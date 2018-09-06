@@ -14,5 +14,14 @@
 		{
 			return "<div style='border-style: ".$style."; border-width: 5px; border-color: ".$color."; border-radius: ".$radius.";'>".$content."</div>";
 		}
+
+		function contains($value, $array){
+			foreach ($array as $val) {
+				if ($val == $value) {
+					return true;
+				}
+			}
+			return false;
+		}
 	}
  ?>

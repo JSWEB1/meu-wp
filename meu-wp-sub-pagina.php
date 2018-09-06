@@ -43,7 +43,7 @@
     				alert('Erro ao Enviar' + retorno);
   				}
 			});
-			return false;
+			return true;
 		}		
 
 		function postCats(){
@@ -79,13 +79,24 @@
 	{
 		if (isset($_POST['expprod'])) 
 		{
+			require_once (MEUWP__DIR.'integracao/config/conn.php');
+			require_once (MEUWP__DIR.'integracao/config/funcs.php');
+
 			$post = new Posts();
 			if(isset( $_POST['prodwoosku']) && $_POST['prodwoosku'] != '')
 			{
 				$post->postOneProd($_POST['prodwoosku']);
 			}else
 			{
-				$post->postAllProd();
+				if (!isset($wpdb)) {
+					global $wpdb;
+				}
+				$conn = new Connection();
+				$sql = "SELECT COUNT(ID_WOO) ID_WOO FROM {$wpdb->prefix}IDWOOTOANY WHERE SYNC = 'N'";
+				do {
+					$F = new Funcs();
+					$post->postAllProd();
+				} while ($conn->returnOneValue($sql, 'ID_WOO') > 0);
 			}
 		}
 		if (isset($_POST['expevt']))

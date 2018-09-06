@@ -17,24 +17,26 @@ define( 'MEUWP__URL', site_url().'/wp-content/plugins/meu-wp/');
 define( 'STORE__URL', site_url() );
 define( 'STORE__DIR', ABSPATH);
 class Posts{
+	function Echo($message){
+		$message = '<h1>'.$message.'</h1>';
+		echo '<h1>'.$message.'</h1>';	
+	}
 	function Alert($message){
 		$message = '<script>myFunction("'.$message.'");</script>';
 		return $message;	
 	}
-
-// time() + 3600 = one hour from now.
 
 	function postOneProd($id){
 		require_once MEUWP__DIR.'integracao/products.php';
 		$prods = new Products();
 		$prods->post($id);
 	}
-	function postAllProd(){
-	require_once MEUWP__DIR.'integracao/products.php';
-	$x = 1;
-	$prods = new Products();
-	$prods->post();
-}
+	function postAllProd($per_request = 10){
+		require_once MEUWP__DIR.'integracao/products.php';
+		$x = 1;
+		$prods = new Products();
+		$prods->post(-1, 10, $per_request);
+	}
 	function postAllCat(){
 		require_once MEUWP__DIR.'integracao/category.php';
 		$prods = new Category();
@@ -311,80 +313,49 @@ add_action('admin_menu', array('MeuAny','criarMenu'));
 
 
 #####################################################################
-
-
-// The activation hook
-// print "hey";
-// function isa_activation(){
-// 	print "isa_activation";
-// 	if( !wp_next_scheduled( 'postAllProd' ) ){
-// 		wp_schedule_event( time(), 'every_three_minutes', 'postAllProd' );
-// 	}
-// }
-// register_activation_hook(   __FILE__, 'isa_activation' );
-
-// // The deactivation hook
-// function isa_deactivation(){
-// 	if( wp_next_scheduled( 'postAllProd') ){
-// 		wp_clear_scheduled_hook( 'postAllProd' );
-// 	}
-// }
-// register_deactivation_hook( __FILE__, 'isa_deactivation' );
-
-
-// // The schedule filter hook
-// function isa_add_every_three_minutes( $schedules ) {
-// 	$schedules['every_three_minutes'] = array(
+/*
+// add_filter( 'cron_schedules', 'isa_postAllProd' );
+// function isa_postAllProd( $schedules ) {
+// 	$schedules['postAllProd'] = array(
 // 		'interval'  => 180,
 // 		'display'   => __( 'Every 3 Minutes', 'textdomain' )
 // 	);
 
 // 	return $schedules;
 // }
-// add_filter( 'cron_schedules', 'isa_add_every_three_minutes' );
 
-//  Schedule de produtos
-add_filter( 'cron_schedules', 'isa_postAllProd' );
-function isa_postAllProd( $schedules ) {
-	$schedules['postAllProd'] = array(
-		'interval'  => 180,
-		'display'   => __( 'Every 3 Minutes', 'textdomain' )
-	);
+// if ( ! wp_next_scheduled( 'isa_postAllProd' ) ) {
+//     wp_schedule_event( time() + 5, 'postAllProd', 'isa_postAllProd' );
+// }
 
-	return $schedules;
-}
+// add_action( 'isa_postAllProd', 'postAllProdFun' );
+// function postAllProdFun(){
+// 	require_once MEUWP__DIR.'integracao/products.php';
+// 	$x = 1;
+// 	$prods = new Products();
+// 	$prods->post();
+// }
 
-if ( ! wp_next_scheduled( 'isa_postAllProd' ) ) {
-    wp_schedule_event( time() + 5, 'postAllProd', 'isa_postAllProd' );
-}
+// //Schedule de categorias
+// add_filter( 'cron_schedules', 'isa_postAllCat' );
+// function isa_postAllCat( $schedules ) {
+// 	$schedules['postAllCat'] = array(
+// 		'interval'  => 180,
+// 		'display'   => __( 'Every 3 Minutes', 'textdomain' )
+// 	);
 
-add_action( 'isa_postAllProd', 'postAllProdFun' );
-function postAllProdFun(){
-	require_once MEUWP__DIR.'integracao/products.php';
-	$x = 1;
-	$prods = new Products();
-	$prods->post();
-}
+// 	return $schedules;
+// }
 
-//Schedule de categorias
-add_filter( 'cron_schedules', 'isa_postAllCat' );
-function isa_postAllCat( $schedules ) {
-	$schedules['postAllCat'] = array(
-		'interval'  => 180,
-		'display'   => __( 'Every 3 Minutes', 'textdomain' )
-	);
+// if ( ! wp_next_scheduled( 'isa_postAllCat' ) ) {
+//     wp_schedule_event( time() + 5, 'postAllCat', 'isa_postAllCat' );
+// }
 
-	return $schedules;
-}
-
-if ( ! wp_next_scheduled( 'isa_postAllCat' ) ) {
-    wp_schedule_event( time() + 5, 'postAllCat', 'isa_postAllCat' );
-}
-
-add_action( 'isa_postAllCat', 'postAllCatFun' );
-	function postAllCatFun(){
-		require_once MEUWP__DIR.'integracao/category.php';
-		$prods = new Category();
-		$prods->post();
-	}
+// add_action( 'isa_postAllCat', 'postAllCatFun' );
+// 	function postAllCatFun(){
+// 		require_once MEUWP__DIR.'integracao/category.php';
+// 		$prods = new Category();
+// 		$prods->post();
+// 	}
+*/
 ?>

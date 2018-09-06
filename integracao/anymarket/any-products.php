@@ -60,9 +60,6 @@
 					$json = str_replace("</p>", "", $json);
 				}
 			}
-			echo "<br>";
-			print_r($json);
-			echo "<br>";
 			$ch = curl_init($this->any_auth()->getUrl().'products');      
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);                                                                  
