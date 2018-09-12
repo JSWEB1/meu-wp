@@ -7,6 +7,7 @@
 			include_once (MEUWP__DIR.'integracao/config/auth.php');
 			include_once (MEUWP__DIR.'integracao/config/conn.php');
 			include_once (MEUWP__DIR.'integracao/anymarket/any-orders.php');
+			include_once (MEUWP__DIR.'integracao/woo/woo-orders.php');
 			$F = new Funcs();
 			$auth = new Auth();
 			$conn = new Connection();
@@ -17,8 +18,11 @@
 		{
 			$objOrder = new Order();
 			$orderJson = $objOrder->get($idAny);
-			print_r(json_decode($orderJson, true));
+			$arrayOrder = json_decode($orderJson, true);
+			$objWooOrder = new Orders();
+			$result = $objWooOrder->post($arrayOrder);
 			return;
+			var_dump($result);
 			$arrayResult = $this->getOrdersToUp();
 			var_dump($arrayResult);
 		}

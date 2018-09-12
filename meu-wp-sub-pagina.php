@@ -126,8 +126,11 @@
 			if(isset( $_POST['catwooid']) && $_POST['catwooid'] != '')
 			{
 				$post->postOneCat($_POST['catwooid']);
-			}else
+				echo '<h1>1lé</h1>';
+			}
+			else
 			{
+				echo '<h1>2lé</h1>';
 				$post->postAllCat();
 			}
 		}

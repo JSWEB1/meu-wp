@@ -1,7 +1,7 @@
 <?php 
 	class Orders
 	{
-		function get($id = -1, $per_page = 10, $subcat = false))
+		function get($id = -1, $per_page = 10, $subcat = false)
 		{
 
 		}
@@ -16,7 +16,7 @@
 			$conn = new Connection();
 
 			$statusOrder = '';
-			switch ($F->notNull($order['status'], 'PENDING')) {
+			switch ($F->notNull($order["status"], 'PENDING')) {
 				case 'CONCLUDED':
 					$statusOrder = 'COMPLETED';
 					break;
@@ -39,69 +39,53 @@
 					$statusOrder = 'PENDING';
 					break;
 			}
-			$items = new array();
-			foreach ($objItens as $order['items']) {
+			$items = array();
+			foreach ($order['items'] as $objItens) {
 				$items[] = array(
 					'product_id' => $F->notNull($conn->getVincByAny('P', $objItens['product']['id']), '0'),
-		            'quantity' => $F->notNull($objItens['product']['amount'], '0')
+		            'quantity' => $F->notNull($objItens['amount'], '0')
 				);
 			}
 			$data = array(
 				[
 					//TO-DO Conferir Regras do Status
-					'status' => $statusOrder,
-				    'payment_method' => '{$F->notNull($order['payments'][0]['method'], '')}',
-				    'payment_method_title' => '{$F->notNull($order['payments'][0]['method'], '')}',
-				    'set_paid' => {$F->notNull($order['payments'][0]['status'], 'false') == 'Pago' ? 'true' : 'false'},
+					"status" => $statusOrder,
+				    'payment_method' => $F->notNull($order["payments"][0]["method"], ''),
+				    'payment_method_title' => $F->notNull($order["payments"][0]["method"], ''),
+				    'set_paid' => $F->notNull($order["payments"][0]["status"], 'false') == 'Pago' ? 'true' : 'false',
 				    'billing' => [
-				        'first_name' => '{$F->notNull($order['buyer']['name'], '')}',
+				        'first_name' => $F->notNull($order["buyer"]["name"], ''),
 				        'last_name' => '',
-				        'address_1' => '{$F->notNull($order['shipping']['address'], '')}',
+				        'address_1' => $F->notNull($order["shipping"]["address"], ''),
 				        'address_2' => '',
-				        'city' => '{$F->notNull($order['shipping']['city'], '')}',
-				        'state' => '{$F->notNull($order['shipping']['state'], '')}',
-				        'postcode' => '{$F->notNull($order['shipping']['zipCode'], '')}',
-				        'country' => '{$F->notNull($order['shipping']['country'], '')}',
-				        'email' => '{$F->notNull($order['buyer']['email'], '')}',
-				        'phone' => '{$F->notNull($order['buyer']['phone'], '')}'
+				        "city" => $F->notNull($order["shipping"]["city"], ''),
+				        "state" => $F->notNull($order["shipping"]["state"], ''),
+				        'postcode' => $F->notNull($order["shipping"]["zipCode"], ''),
+				        "country" => $F->notNull($order["shipping"]["country"], ''),
+				        "email" => $F->notNull($order["buyer"]["email"], ''),
+				        "phone" => $F->notNull($order["buyer"]["phone"], '')
 				    ],
-				    'shipping' => [
-				        'first_name' => '{$F->notNull($order['buyer']['name'], '')}',
+				    "shipping" => [
+				        'first_name' => $F->notNull($order["buyer"]["name"], ''),
 				        'last_name' => '',
-				        'address_1' => '{$F->notNull($order['shipping']['address'], '')}',
+				        'address_1' => $F->notNull($order["shipping"]["address"], ''),
 				        'address_2' => '',
-				        'city' => '{$F->notNull($order['shipping']['city'], '')}',
-				        'state' => '{$F->notNull($order['shipping']['state'], '')}',
-				        'postcode' => '{$F->notNull($order['shipping']['zipCode'], '')}',
-				        'country' => '{$F->notNull($order['shipping']['country'], '')}',
+				        "city" => $F->notNull($order["shipping"]["city"], ''),
+				        "state" => $F->notNull($order["shipping"]["state"], ''),
+				        'postcode' => $F->notNull($order["shipping"]["zipCode"], ''),
+				        "country" => $F->notNull($order["shipping"]["country"], ''),
 				    ],
-				    'line_items' => [
-				        [
-				            'product_id' => 93,
-				            'quantity' => 2
-				        ],
-				        [
-				            'product_id' => 22,
-				            'variation_id' => 23,
-				            'quantity' => 1
-				        ]
-				    ],
-				    'shipping_lines' => [
-				        [
-				            'method_id' => 'flat_rate',
-				            'method_title' => 'Flat Rate',
-				            'total' => 10
-				        ]
-				    ]
+				    'line_items' => $items
 				]
 			);
+			$dataJson = json_encode($data);
+			$resultJson = $woo->post('orders', $dataJson);
 
-			$resultJson = $woo->post('orders', $data);
 			$resultArray = json_decode($resultJson, true);
 			$conn->saveVinc('O', $resultArray['id'], $id, 'S');
 		}
 	}
-	require_once ('vendor/autoload.php');
+	/*require_once ('vendor/autoload.php');
 	require_once ('config/auth.php');
 	require_once ('anymarket/any-orders.php');
 	require_once ('config/funcs.php');
@@ -135,22 +119,22 @@
 					'partnerId' => $r[$i]['id'],
 					'createdAt' => $r[$i]['date_created'].'Z',
 					'paymentDate' => $r[$i]['date_paid'],
-					'marketPlaceStatus'=> $r[$i]['status'],
-					'status' => $r[$i]['status'],
+					'marketPlaceStatus'=> $r[$i]["status"],
+					"status" => $r[$i]["status"],
 					'marketplace' => 'ECOMMERCE',
 					'marketPlaceId'=> $r[$i]['id'],
 					'marketPlaceShipmentStatus'=> '',
 						'billingAddress' => array(
-							'city' => $billing ['city'],
-							'state' => $billing ['state'],
-							'country' => $billing ['country'],
+							"city" => $billing ["city"],
+							"state" => $billing ["state"],
+							"country" => $billing ["country"],
 							'street' => $billing ['address_1'],
 							'number' => $billing ['address_2'],
-							'zipCode' => $billing ['postcode'],
+							"zipCode" => $billing ['postcode'],
 						),
-						'payments' => array(
-						'method' => $r[$i]['payment_method_title'],
-						'status' => $r[$i]['status'],
+						"payments" => array(
+						"method" => $r[$i]['payment_method_title'],
+						"status" => $r[$i]["status"],
 						'value' => $r[$i]['total']
 						),
 						'items' => array([
@@ -164,13 +148,13 @@
 						'price' => $r[$i]['total'],
 						'total' => $r[$i]['total'],
 						]),
-						'buyer' =>array(
-						'name' => $billing['first_name']. $billing['last_name'],
-						'email' => $billing['email'],
-						"phone" => $billing['phone']
+						"buyer" =>array(
+						"name" => $billing['first_name']. $billing['last_name'],
+						"email" => $billing["email"],
+						"phone" => $billing["phone"]
 						),
 					);
 				}
 			}
-		}
+		}*/
 ?>

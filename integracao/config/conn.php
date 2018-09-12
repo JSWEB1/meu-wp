@@ -1,5 +1,6 @@
 <?php 
 	require_once (STORE__DIR.'wp-config.php');
+	require_once (MEUWP__DIR.'integracao/config/funcs.php');
 	class Connection{
 		public function __construct(){
 			if (!isset($wpdb)) {
@@ -42,7 +43,9 @@
 			if (!isset($wpdb)) {
 				global $wpdb;
 			}
-			$return = $wpdb->get_results("insert into {$wpdb->prefix}IDWOOTOANY (TYPE, DESCRIPTION, ID_WOO, ID_ANY, SYNC, DATE_TIME) values ('{$type}', '{$description}', {$idWoo}, {$idAny}, '{$sync}', '{date(\"Y-m-d H:i:s\", $phptime)}')", OBJECT);
+			$F = new Funcs();
+
+			$return = $wpdb->get_results("insert into {$wpdb->prefix}IDWOOTOANY (TYPE, DESCRIPTION, ID_WOO, ID_ANY, SYNC, DATE_TIME) values ('{$type}', '{$description}', {$idWoo}, {$idAny}, '{$sync}', '{$F->getDatetimeNow()}')", OBJECT);
 			return $return;
 		}
 		public function getVincByWoo($type, $id){
