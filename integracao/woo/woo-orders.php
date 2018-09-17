@@ -46,10 +46,10 @@
 		            'quantity' => $F->notNull($objItens['amount'], '0')
 				);
 			}
+					// //TO-DO Conferir Regras do Status
+					// 'status' => $statusOrder,
 			$data = array(
-				[
-					//TO-DO Conferir Regras do Status
-					"status" => $statusOrder,
+				
 				    'payment_method' => $F->notNull($order["payments"][0]["method"], ''),
 				    'payment_method_title' => $F->notNull($order["payments"][0]["method"], ''),
 				    'set_paid' => $F->notNull($order["payments"][0]["status"], 'false') == 'Pago' ? 'true' : 'false',
@@ -76,13 +76,10 @@
 				        "country" => $F->notNull($order["shipping"]["country"], ''),
 				    ],
 				    'line_items' => $items
-				]
+				
 			);
-			$dataJson = json_encode($data);
-			$resultJson = $woo->post('orders', $dataJson);
-
-			$resultArray = json_decode($resultJson, true);
-			$conn->saveVinc('O', $resultArray['id'], $id, 'S');
+			$result = $woo->post('orders', $data);
+			$conn->saveVinc('O', $result['id'], $id, 'S');
 		}
 	}
 	/*require_once ('vendor/autoload.php');

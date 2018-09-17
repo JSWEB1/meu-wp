@@ -21,10 +21,6 @@
 			$arrayOrder = json_decode($orderJson, true);
 			$objWooOrder = new Orders();
 			$result = $objWooOrder->post($arrayOrder);
-			return;
-			var_dump($result);
-			$arrayResult = $this->getOrdersToUp();
-			var_dump($arrayResult);
 		}
 
 		function getOrdersToUp()
