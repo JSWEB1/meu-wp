@@ -53,5 +53,10 @@
 				echo '<script>myFunction("Tudo OK \n'.$result.'");</script>';
 			}
 		}
+
+		function putStock($data)
+		{
+			$conn->put(F->notNull($data["ID"], $data));
+		}
 	}	
  ?>

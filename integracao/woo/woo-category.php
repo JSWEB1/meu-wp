@@ -40,7 +40,7 @@
 								{
 									print_r($r[$i]['parent']);
 									$arrayAny[] = array(
-											'id_chield' => $conn->getVincByWoo("C", $F->notNull($r[$i]['id'], 0)),
+											'id_child' => $conn->getVincByWoo("C", $F->notNull($r[$i]['id'], 0)),
 											'cat' => array(
 												'name' => $r[$i]['name'],
 												'parent' => array(
