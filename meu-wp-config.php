@@ -191,10 +191,15 @@ if($_POST){
 				  			if(!isset($wpdb)){
 				  				global $wpdb;
 				  			}
-							$sql = "select ID_WOO,
-							CASE
-							When TYPE = 'C' then 'Categoria'
-							end as type
+							$sql = "select ID_WOO, SYNC,DATE_TIME,
+							CASE TYPE
+							When 'C' then 'Categoria'
+							when 'P' then 'Produto'
+							end as type_case,
+							CASE SYNC
+							when 'N' then 'Não enviado'
+							when 'S' then 'Enviado'
+							end as sync_case, type,sync
 							from {$wpdb->prefix}IDWOOTOANY ";
 							$result = $wpdb->get_results($sql);
 							$exibe = json_decode(json_encode($result), true);
@@ -207,18 +212,29 @@ if($_POST){
 							echo "<tr>";
 							echo "<th>ID</th>";
 							echo "<th>Tipo</th>";
+							echo "<th>Status</th>";
+							echo "<th>Data</th>";
 							echo "</tr>";
 							echo "</thead>";
 							foreach ($exibe as $IDZAO) {
 								echo("<tr>");
 								echo "<td>".$IDZAO['ID_WOO']."</td>";
-								echo "<td>".$IDZAO['type']."</td>";
+
+								echo "<td>".$IDZAO['type_case']."</td>";
+								if ($IDZAO['SYNC'] == "N")   {
+									echo "<td class='bg-danger'>".$IDZAO['sync_case']."</td>";
+								}else{
+									echo "<td class='bg-success'>".$IDZAO['sync_case']."</td>";
+								}
+								
+								echo "<td>".$IDZAO['DATE_TIME']."</td>";
 								echo("</tr>");
 							}
 							
 							echo "</table>";
 							echo "</div>";
 							echo "</div>";
+
 
 						?>
 					</div>

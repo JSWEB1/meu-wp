@@ -17,10 +17,7 @@ define( 'MEUWP__URL', site_url().'/wp-content/plugins/meu-wp/');
 define( 'STORE__URL', site_url() );
 define( 'STORE__DIR', ABSPATH);
 class Posts{
-	function Echo($message){
-		$message = '<h1>'.$message.'</h1>';
-		echo '<h1>'.$message.'</h1>';	
-	}
+
 	function Alert($message){
 		$message = '<script>myFunction("'.$message.'");</script>';
 		return $message;	
@@ -358,4 +355,10 @@ add_action('admin_menu', array('MeuAny','criarMenu'));
 // 		$prods->post();
 // 	}
 */
+add_action( 'woocommerce_checkout_order_processed', 'orderInit' );
+
+function orderInit() {
+	echo '<script>myFunction("order ta aqui");</script>';
+	echo '<h1>"order ta aqui"</h1>';
+}
 ?>
