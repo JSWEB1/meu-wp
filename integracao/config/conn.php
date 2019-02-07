@@ -55,6 +55,7 @@
 			$sql = "select max(ID_ANY) as ID_ANY from {$wpdb->prefix}IDWOOTOANY where ID_WOO = {$id} and TYPE = '{$type}'";
 			//print_r($sql);
 			$return = $wpdb->get_results($sql, OBJECT);
+			
 			return json_decode(json_encode($return[0]), true)["ID_ANY"];
 		}
 		

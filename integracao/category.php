@@ -66,7 +66,7 @@
 				echo '<script>myFunction("Tudo OK \n'.$result.'");</script>';
 			} 
 
-			$arrayAny = $catW->get($id, $per_page, true);
+			$arrayAny = $catW->get($id, $per_page);
 			if (count($arrayAny) > 0) 
 			{
 				for ($i=0; $i < count($arrayAny); $i++) 

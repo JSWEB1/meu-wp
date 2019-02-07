@@ -12,6 +12,7 @@
 		}
 		public function post($data)
 		{
+			
 			$str = $data['description'];
 			$data['description'] = trim($str, '<p>');
 			$data['description'] = trim($str, '</p>');
@@ -59,7 +60,11 @@
 				if (strpos($json, "</p>")) {
 					$json = str_replace("</p>", "", $json);
 				}
+				$json = trim($json,'"{"' .'"0"'.' ":'.'"');
+				$json = '{"' . $json;
 			}
+			var_dump($json);
+			echo '<br><br>';
 			$ch = curl_init($this->any_auth()->getUrl().'products');      
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);                                                                  
@@ -67,9 +72,10 @@
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
 			    'Content-Type: application/json',                                                                                
 			    'Content-Length: ' . strlen($json),
-			    'gumgaToken: '.'L28917560G1530708979570R-1673130305')                                                                    
+			    'gumgaToken: '.'L29462187G1540487908294R-1919731388')                                                                    
 			);          
 			$result = curl_exec($ch);
+			var_dump($result);
 			return $result;                                                                                                              
 		}
 		public function get($id)
@@ -84,7 +90,7 @@
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                         
 			    'Content-Type: application/json',   
-			    'gumgaToken: '.'L28917560G1530708979570R-1673130305')                                                                    
+			    'gumgaToken: '.'L29462187G1540487908294R-1919731388')                                                                    
 			);   
 			$result = curl_exec($ch);
 			if (isset($result['content'])) {

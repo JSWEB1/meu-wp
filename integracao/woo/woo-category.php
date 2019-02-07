@@ -24,41 +24,47 @@
 					}
  					if ($id > 0) 
  					{
- 						$r = $woo->get($endpoint);
+						 $r = $woo->get($endpoint);
+
  					}else
  					{
 						$r = $woo->get($endpoint, array('per_page' => $per_page, 'page' => $pagination));
- 					}
+
+					 }
+					 
 					if ($r != null) 
 					{
+						
 						if (count($r) > -1) 
 						{
 							for ($i=0; $i < count($r); $i++) 
 							{
 								
-								if ($subcat == true && $r[$i]['parent'] > 0) 
+								if ($subcat == true && $r[$i]->parent > 0) 
 								{
-									print_r($r[$i]['parent']);
+									print_r($r[$i]->parent);
 									$arrayAny[] = array(
-											'id_child' => $conn->getVincByWoo("C", $F->notNull($r[$i]['id'], 0)),
+											'id_child' => $conn->getVincByWoo("C", $F->notNull($r[$i]->id, 0)),
 											'cat' => array(
-												'name' => $r[$i]['name'],
+												'name' => $r[$i]->name,
 												'parent' => array(
-																'id' => $conn->getVincByWoo("C", $F->notNull($r[$i]['parent'], 0))
+																'id' => $conn->getVincByWoo("C", $F->notNull($r[$i]->parent, 0))
 															),
 											),
 									);
+									var_dump($arrayAny);
 								}
 								else if ($subcat == false) 
 								{
 									$arrayAny[] = array(
-										'id' => $r[$i]['id'],
-										'name' => $r[$i]['name'],
-										'partnerId' => $r[$i]['id'],
+										'id' => $r[$i]->id,
+										'name' => $r[$i]->name,
+										'partnerId' => $r[$i]->id,
 										'priceFactor' => 1,
 										'calculatedPrice' => true,
 										'definitionPriceScope' => 'COST',
 									);
+									
 								}
 							}
 						}
@@ -98,6 +104,7 @@
 					{
 						break;
 					}
+					// var_dump($arrayAny);
 				} catch (Exception $e) {	
 					$error = 'Erro durante o processo: '.$e;
 					echo '<script>myFunction("'.$error.'");</script>';

@@ -9,6 +9,9 @@
 		public function post($data)
 		{
 			$json = json_encode($data);	
+			var_dump($json);
+			echo "____________________";
+			var_dump($data);
 			$ch = curl_init($this->any_auth()->getUrl().'categories');
 			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $json);                                                                  
@@ -19,7 +22,8 @@
 			    'gumgaToken: '.$this->any_auth()->getTokenAny())                                                                    
 			);            
 			$result = curl_exec($ch);
-			return $result;                                                                                                              
+			var_dump($result);                                                                                                        
+			return $result;      
 		}
 		public function put($id, $data)
 		{

@@ -20,7 +20,8 @@
 						}
 						//Se Vier com ID    GET com ID        se não GET por PÁGINA
 	 					if ($id > 0) {
-	 						$r = $woo->get($endpoint);
+							 $r = $woo->get($endpoint);
+							 var_dump($r);
 	 					}else{
 							$r = $woo->get($endpoint, array('per_page' => $per_page, 'page' => $pagination));
 	 					}
@@ -46,23 +47,24 @@
 									$attributes = $attr->get($r[$i]['dimensions']);
 									$dimensions = $r[$i]['dimensions'];
 									$arrayAny[] = array(
-									'id' => $r[$i]['id'],
-									'title' => $r[$i]['name'],
-									'description' => $r[$i]['description'],
+									'id' => $r[$i]->id,
+									'title' => $r[$i]->name,
+									'description' => $r[$i]->description,
 									'priceFactor' => 1,
 									'category' => array(
-															'id' => $conn->getVincByWoo("C", $r[$i]['categories'][0]['id']),
-															'name' => $r[$i]['categories'][0]['name'],
+															'id' => $conn->getVincByWoo("C", $r[$i]->categories[0]['id']),
+															'name' => $r[$i]->categories[0]['name'],
 														),
-									'weight' => $F->notNull($r[$i]['weight'], 0),
+														
+									'weight' => $F->notNull($r[$i]->weight, 0),
 									'height' => $F->notNull($dimensions['height'], 0),
 									'width' => $F->notNull($dimensions['width'], 0),
 									'length' => $F->notNull($dimensions['length'], 0),
 									'images' => $images,	
 									'characteristics' => $attributes,		
 									'skus' => array([
-										'title' => $F->notNull($r[$i]['name'], ""),
-										'partnerId' => ($F->notNull($r[$i]['sku'], "") == '') ? $F->notNull($r[$i]['sku'].'-'.$r[$i]['name'], "") : $F->notNull($r[$i]['sku'], ""), 
+										'title' => $F->notNull($r[$i]->name, ""),
+										'partnerId' => ($F->notNull($r[$i]->sku, "") == '') ? $F->notNull($r[$i]['sku'].'-'.$r[$i]['name'], "") : $F->notNull($r[$i]['sku'], ""), 
 										'price'=> $F->notNull($r[$i]['price'], 1),
 										'additionalTime' => 0,
 										'amount'=> $F->notNull($r[$i]['stock_quantity'], 1), 
@@ -104,7 +106,7 @@
 										$images = array();
 										$attributes = array();
 
-										for($j = 0; $j < count($r[$i]['images']); $j++){
+										for($j = 0; $j < count($r[$i]->images); $j++){
 											//Prepara a Array <images> do produto
 											$images[] = array(
 												'main' => $r[$i]['images'][$j]['position'] == 0,
@@ -112,34 +114,32 @@
 												'index' => $r[$i]['images'][$j]['position']
 											);	
 										}
-										foreach ($r[$i]['attributes'] as $attrib) {
+										foreach ($r[$i]->attributes as $attrib) {
 											foreach ($attr->get($r[$i]['attributes']['id']) as $value) {
 												$attributes[] = $value;
 											}
 										}
-										$attributes = $attr->get($r[$i]['dimensions']);
-										$dimensions = $r[$i]['dimensions'];
+										$dimensions = $r[$i]->dimensions;
 										$arrayAny[] = array(
-										'id' => $r[$i]['id'],
-										'title' => $r[$i]['name'],
-										'description' => $r[$i]['description'],
+										'id' => $r[$i]->id,
+										'title' => $r[$i]->name,
+										'description' => $r[$i]->description,
 										'priceFactor' => 1,
 										'category' => array(
-																'id' => $conn->getVincByWoo("C", $r[$i]['categories'][0]['id']),
-																'name' => $r[$i]['categories'][0]['name'],
+																'id' => $conn->getVincByWoo("C", $r[$i]->categories[0]->id),
+																'name' => $r[$i]->categories[0]->name,
 															),
-										'weight' => $F->notNull($r[$i]['weight'], 0),
-										'height' => $F->notNull($dimensions['height'], 0),
-										'width' => $F->notNull($dimensions['width'], 0),
-										'length' => $F->notNull($dimensions['length'], 0),
-										'images' => $images,			
-										'characteristics' => $attributes,			
+										'weight' => $F->notNull($r[$i]->weight, 0),
+										'height' => $F->notNull($dimensions->height, 0),
+										'width' => $F->notNull($dimensions->width, 0),
+										'length' => $F->notNull($dimensions->length, 0),
+										'images' => $images,					
 										'skus' => array([
-											'title' => $F->notNull($r[$i]['name'], ""),
-											'partnerId' => ($F->notNull($r[$i]['sku'], "") == '') ? $F->notNull($r[$i]['sku'].'-'.$r[$i]['name'], "") : $F->notNull($r[$i]['sku'], ""),
-											'price'=> $F->notNull($r[$i]['price'], 1),
+											'title' => $F->notNull($r[$i]->name, ""),
+											'partnerId' => ($F->notNull($r[$i]->sku, "") == '') ? $F->notNull($r[$i]->sku.'-'.$r[$i]->name, "") : $F->notNull($r[$i]->sku, ""),
+											'price'=> $F->notNull($r[$i]->price, 1),
 											'additionalTime' => 0,
-											'amount'=> $F->notNull($r[$i]['stock_quantity'], 1), 
+											'amount'=> $F->notNull($r[$i]->stock_quantity, 1), 
 										]),
 										);
 									}

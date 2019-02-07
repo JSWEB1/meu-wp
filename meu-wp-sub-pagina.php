@@ -170,7 +170,7 @@
 	         				<dt style="text-align:center">
 							<label style="">Limite por envio (20 a 100)<input type="text"  class="form-control" name="catwooli" value="<?php echo get_option('limit_catwoo');?>"/></label>
 							<br><br>
-							<button style="width:230px" type="submit"	class="btn btn-primary" id="expcat" name="expcat" onclick="return postCats()">
+							<button style="width:230px" type="submit"	class="btn btn-primary" id="expcat" name="expcat" onclick="">
 							  <span class="glyphicon glyphicon-export"></span>
 							  <b>Exportar todas</b>
 							</button>

@@ -11,7 +11,6 @@
 			$prodW = new ProductsWoo();
 			$conn = new Connection();
 			$arrayAny = $prodW->get($id, $per_page, $per_request);
-
 			if (count($arrayAny) > 1) 
 			{
 			 	$count = 1;
@@ -29,9 +28,9 @@
 			 				$result = ($prodAny->post($arrayAny[$i]));
 			 				if (isset($result)) {
 			 					$resultArray = json_decode($result, true);
-			 					$conn->saveVinc("P", $arrayAny[$i]['id'], $resultArray['id'], 'S');
+			 					$conn->saveVinc("P", $arrayAny[$i]['id'], $resultArray['id']);
 			 				}
-			 			}
+						 }
 			 		} 
 			 		catch (Exception $e) 
 			 		{
@@ -47,9 +46,9 @@
 		 				$result = ($prodAny->post($arrayAny));
 		 				if (isset($result)) {
 		 					$resultArray = json_decode($result, true);
-		 					$conn->saveVinc("P", $arrayAny['id'], $resultArray['id'], 'S');
+		 					$conn->saveVinc("P", $arrayAny[0]['id'], $resultArray['id'],"S");
 			 			}
-			 		}
+					 }
 				} 
 				catch (Exception $e) 
 				{

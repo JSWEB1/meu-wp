@@ -31,7 +31,7 @@
 				$this->getCs(),
 				[
 					'wp_api' => true,
-					'version' => 'wc/v2',
+					'version' => 'wc/v3',
 				]
 			);
 			return $woo;
